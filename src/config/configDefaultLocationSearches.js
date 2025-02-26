@@ -12,40 +12,41 @@ const { LatLng, LatLngBounds } = sdkTypes;
 //       1) help customers to find relevant locations, and
 //       2) reduce the cost of using map providers geocoding API
 const defaultLocations = [
-  // {
-  //   id: 'default-helsinki',
-  //   predictionPlace: {
-  //     address: 'Helsinki, Finland',
-  //     bounds: new LatLngBounds(new LatLng(60.29783, 25.25448), new LatLng(59.92248, 24.78287)),
-  //   },
-  // },
-  // {
-  //   id: 'default-turku',
-  //   predictionPlace: {
-  //     address: 'Turku, Finland',
-  //     bounds: new LatLngBounds(new LatLng(60.53045, 22.38197), new LatLng(60.33361, 22.06644)),
-  //   },
-  // },
-  // {
-  //   id: 'default-tampere',
-  //   predictionPlace: {
-  //     address: 'Tampere, Finland',
-  //     bounds: new LatLngBounds(new LatLng(61.83657, 24.11838), new LatLng(61.42728, 23.5422)),
-  //   },
-  // },
-  // {
-  //   id: 'default-oulu',
-  //   predictionPlace: {
-  //     address: 'Oulu, Finland',
-  //     bounds: new LatLngBounds(new LatLng(65.56434, 26.77069), new LatLng(64.8443, 24.11494)),
-  //   },
-  // },
-  // {
-  //   id: 'default-ruka',
-  //   predictionPlace: {
-  //     address: 'Ruka, Finland',
-  //     bounds: new LatLngBounds(new LatLng(66.16997, 29.16773), new LatLng(66.16095, 29.13572)),
-  //   },
-  // },
+  {
+    id: 'default-bangkok',
+    predictionPlace: {
+      address: 'Bangkok, Thailand',
+      bounds: new LatLngBounds(new LatLng(13.957, 100.728), new LatLng(13.528, 100.327)),
+    },
+  },
+  {
+    id: 'default-chiangmai',
+    predictionPlace: {
+      address: 'Chiang Mai, Thailand',
+      bounds: new LatLngBounds(new LatLng(19.001, 99.123), new LatLng(18.669, 98.878)),
+    },
+  },
+  {
+    id: 'default-phuket',
+    predictionPlace: {
+      address: 'Phuket, Thailand',
+      bounds: new LatLngBounds(new LatLng(8.191, 98.398), new LatLng(7.726, 98.246)),
+    },
+  },
+  {
+    id: 'default-pattaya',
+    predictionPlace: {
+      address: 'Pattaya, Thailand',
+      bounds: new LatLngBounds(new LatLng(13.005, 100.956), new LatLng(12.850, 100.869)),
+    },
+  },
+  {
+    id: 'default-krabi',
+    predictionPlace: {
+      address: 'Krabi, Thailand',
+      bounds: new LatLngBounds(new LatLng(8.198, 98.925), new LatLng(7.719, 98.779)),
+    },
+  },
 ];
+
 export default defaultLocations;
