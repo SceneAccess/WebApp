@@ -17,6 +17,12 @@ import EditListingPhotosPanel from './EditListingPhotosPanel/EditListingPhotosPa
 import EditListingPricingPanel from './EditListingPricingPanel/EditListingPricingPanel';
 import EditListingPricingAndStockPanel from './EditListingPricingAndStockPanel/EditListingPricingAndStockPanel';
 
+import EditListingStyleAestheticsPanel from './EditListingStyleAestheticsPanel/EditListingStyleAestheticsPanel';
+import EditListingProductionFeaturesPanel from './EditListingProductionFeaturesPanel/EditListingProductionFeaturesPanel';
+import EditListingOutdoorNaturalPanel from './EditListingOutdoorNaturalPanel/EditListingOutdoorNaturalPanel';
+import EditListingAccessibilityLogisticsPanel from './EditListingAccessibilityLogisticsPanel/EditListingAccessibilityLogisticsPanel';
+import EditListingRulesRestrictionsPanel from './EditListingRulesRestrictionsPanel/EditListingRulesRestrictionsPanel';
+
 import css from './EditListingWizardTab.module.css';
 
 export const DETAILS = 'details';
@@ -26,16 +32,24 @@ export const DELIVERY = 'delivery';
 export const LOCATION = 'location';
 export const AVAILABILITY = 'availability';
 export const PHOTOS = 'photos';
+export const STYLE_AESTHETICS = 'style-aesthetics';
+export const PRODUCTION_FEATURES = 'production-features';
+export const OUTDOOR_NATURAL = 'outdoor-natural';
+export const ACCESSIBILITY_LOGISTICS = 'accessibility-logistics';
+export const RULES_RESTRICTIONS = 'rules-restrictions';
 
 // EditListingWizardTab component supports these tabs
 export const SUPPORTED_TABS = [
-  DETAILS,
-  PRICING,
-  PRICING_AND_STOCK,
-  DELIVERY,
-  LOCATION,
-  AVAILABILITY,
-  PHOTOS,
+  DETAILS,       // Existing - Keep
+  LOCATION,      // Existing - Keep
+  PRICING,       // Existing - Keep
+  AVAILABILITY,  // Existing - Keep
+  PHOTOS,        // Existing - Keep
+  STYLE_AESTHETICS,
+  PRODUCTION_FEATURES,
+  OUTDOOR_NATURAL,
+  ACCESSIBILITY_LOGISTICS,
+  RULES_RESTRICTIONS,
 ];
 
 const pathParamsToNextTab = (params, tab, marketplaceTabs) => {
@@ -213,6 +227,64 @@ const EditListingWizardTab = props => {
     case DELIVERY: {
       return (
         <EditListingDeliveryPanel {...panelProps(DELIVERY)} marketplaceCurrency={config.currency} />
+      );
+    }
+    case LOCATION: {
+      return <EditListingLocationPanel {...panelProps(LOCATION)} />;
+    }
+    case AVAILABILITY: {
+      return (
+        <EditListingAvailabilityPanel
+          allExceptions={allExceptions}
+          weeklyExceptionQueries={weeklyExceptionQueries}
+          monthlyExceptionQueries={monthlyExceptionQueries}
+          onFetchExceptions={onFetchExceptions}
+          onAddAvailabilityException={onAddAvailabilityException}
+          onDeleteAvailabilityException={onDeleteAvailabilityException}
+          onNextTab={() =>
+            redirectAfterDraftUpdate(
+              listing.id,
+              params,
+              tab,
+              marketplaceTabs,
+              history,
+              routeConfiguration
+            )
+          }
+          config={config}
+          history={history}
+          routeConfiguration={routeConfiguration}
+          {...panelProps(AVAILABILITY)}
+        />
+      );
+    }
+    case PHOTOS: {
+      return (
+        <EditListingPhotosPanel
+          {...panelProps(PHOTOS)}
+          listingImageConfig={config.layout.listingImage}
+          images={images}
+          onImageUpload={onImageUpload}
+          onRemoveImage={onRemoveImage}
+        />
+      );
+    }
+    case DETAILS: {
+      return (
+        <EditListingDetailsPanel
+          {...panelProps(DETAILS)}
+          onListingTypeChange={onListingTypeChange}
+          config={config}
+        />
+      );
+    }
+    case PRICING: {
+      return (
+        <EditListingPricingPanel
+          {...panelProps(PRICING)}
+          marketplaceCurrency={config.currency}
+          listingMinimumPriceSubUnits={config.listingMinimumPriceSubUnits}
+        />
       );
     }
     case LOCATION: {

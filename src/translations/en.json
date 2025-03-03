@@ -1117,5 +1117,23 @@
   "UserDisplayName.deleted": "Deleted user",
   "UserNav.accountSettings": "Account settings",
   "UserNav.profileSettings": "Profile settings",
-  "UserNav.yourListings": "Your listings"
+  "UserNav.yourListings": "Your listings",
+
+  "EditListingWizard.tabLabelStyleAesthetics": "Style & Aesthetics",
+  "EditListingWizard.tabLabelProductionFeatures": "Production Features",
+  "EditListingWizard.tabLabelOutdoorNatural": "Outdoor & Natural Elements",
+  "EditListingWizard.tabLabelAccessibilityLogistics": "Accessibility & Logistics",
+  "EditListingWizard.tabLabelRulesRestrictions": "Rules & Restrictions",
+  
+  "EditListingWizard.new.saveStyleAesthetics": "Save Style & Aesthetics",
+  "EditListingWizard.new.saveProductionFeatures": "Save Production Features",
+  "EditListingWizard.new.saveOutdoorNatural": "Save Outdoor & Natural Elements",
+  "EditListingWizard.new.saveAccessibilityLogistics": "Save Accessibility & Logistics",
+  "EditListingWizard.new.saveRulesRestrictions": "Save Rules & Restrictions",
+
+  "EditListingWizard.edit.saveStyleAesthetics": "Update Style & Aesthetics",
+  "EditListingWizard.edit.saveProductionFeatures": "Update Production Features",
+  "EditListingWizard.edit.saveOutdoorNatural": "Update Outdoor & Natural Elements",
+  "EditListingWizard.edit.saveAccessibilityLogistics": "Update Accessibility & Logistics",
+  "EditListingWizard.edit.saveRulesRestrictions": "Update Rules & Restrictions"
 }

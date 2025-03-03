@@ -57,6 +57,11 @@ import EditListingWizardTab, {
   LOCATION,
   AVAILABILITY,
   PHOTOS,
+  STYLE_AESTHETICS,
+  PRODUCTION_FEATURES,
+  OUTDOOR_NATURAL,
+  ACCESSIBILITY_LOGISTICS,
+  RULES_RESTRICTIONS,
 } from './EditListingWizardTab';
 import css from './EditListingWizard.module.css';
 
@@ -68,7 +73,18 @@ import css from './EditListingWizard.module.css';
 //         Details tab asks for "title" and is therefore the first tab in the wizard flow.
 const TABS_DETAILS_ONLY = [DETAILS];
 const TABS_PRODUCT = [DETAILS, PRICING_AND_STOCK, DELIVERY, PHOTOS];
-const TABS_BOOKING = [DETAILS, LOCATION, PRICING, AVAILABILITY, PHOTOS];
+const TABS_BOOKING = [
+  DETAILS,
+  LOCATION,
+  PRICING,
+  AVAILABILITY,
+  STYLE_AESTHETICS,
+  PRODUCTION_FEATURES,
+  OUTDOOR_NATURAL,
+  ACCESSIBILITY_LOGISTICS,
+  RULES_RESTRICTIONS,
+  PHOTOS,
+];
 const TABS_INQUIRY = [DETAILS, LOCATION, PRICING, PHOTOS];
 const TABS_ALL = [...TABS_PRODUCT, ...TABS_BOOKING, ...TABS_INQUIRY];
 
@@ -138,6 +154,22 @@ const tabLabelAndSubmit = (intl, tab, isNewListingFlow, isPriceDisabled, process
   } else if (tab === AVAILABILITY) {
     labelKey = 'EditListingWizard.tabLabelAvailability';
     submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveAvailability`;
+    //New
+  } else if (tab === STYLE_AESTHETICS) {
+    labelKey = 'EditListingWizard.tabLabelStyleAesthetics';
+    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveStyleAesthetics`;
+  } else if (tab === PRODUCTION_FEATURES) {
+    labelKey = 'EditListingWizard.tabLabelProductionFeatures';
+    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveProductionFeatures`;
+  } else if (tab === OUTDOOR_NATURAL) {
+    labelKey = 'EditListingWizard.tabLabelOutdoorNatural';
+    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveOutdoorNatural`;
+  } else if (tab === ACCESSIBILITY_LOGISTICS) {
+    labelKey = 'EditListingWizard.tabLabelAccessibilityLogistics';
+    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveAccessibilityLogistics`;
+  } else if (tab === RULES_RESTRICTIONS) {
+    labelKey = 'EditListingWizard.tabLabelRulesRestrictions';
+    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveRulesRestrictions`;
   } else if (tab === PHOTOS) {
     labelKey = 'EditListingWizard.tabLabelPhotos';
     submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.savePhotos`;
