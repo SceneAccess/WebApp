@@ -23,7 +23,7 @@
 }
 
 .fontInput {
-  font-weight: var(--fontWeightBlack);
+  font-weight: var(--fontWeightWhite);
   font-size: 24px;
   line-height: 24px;
 

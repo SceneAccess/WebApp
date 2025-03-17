@@ -1,38 +1,21 @@
 import React from 'react';
-import { number, objectOf, oneOf, shape, string } from 'prop-types';
 import classNames from 'classnames';
-
-import { ResponsiveImage } from '../../../../components/index.js';
-
+import ImageCarousel from '../../../ListingPage/ImageCarousel/ImageCarousel';
+import { ResponsiveImage } from '../../../../components';
 import css from './CustomAppearance.module.css';
 
 /**
- * @typedef {Object} ImageVariant
- * @property {number} width
- * @property {number} height
- * @property {string} url image source
- */
-
-/**
  * Render a custom appearance for a section component.
- * E.g. change the background color or image of the SectionContainer
+ * Replaces the single background image with an auto-rotating carousel of three images.
+ * Below the carousel, bullet dots indicate the current image.
  *
  * @component
  * @param {Object} props
- * @param {string?} props.className add more style rules in addition to components own css.root
- * @param {string?} props.rootClassName overwrite components own css.root
- * @param {string?} props.backgroundColor hexadecimal color string ('#ffaa00')
- * @param {Object} props.backgroundImage
- * @param {string} props.backgroundImage.id
- * @param {'imageAsset'} props.backgroundImage.type
- * @param {Object} props.backgroundImage.attributes
- * @param {Object<key,ImageVariant>} props.backgroundImage.attributes.variants
- * @param {Object} props.backgroundImageOverlay
- * @param {string} props.backgroundImageOverlay.preset
- * @param {string} props.backgroundImageOverlay.color
- * @param {number} props.backgroundImageOverlay.opacity
- * @param {string?} props.alt
- * @param {string?} props.sizes
+ * @param {string?} props.className additional style rules
+ * @param {string?} props.rootClassName overrides component's own css.root
+ * @param {string?} props.backgroundColor hexadecimal color string
+ * @param {Object} props.backgroundImageOverlay overlay configuration (preset, color, opacity)
+ * @param {string?} props.alt alternative text for the images
  * @returns {JSX.Element} custom appearance for the container of a section component
  */
 export const CustomAppearance = React.forwardRef((props, ref) => {
@@ -40,41 +23,84 @@ export const CustomAppearance = React.forwardRef((props, ref) => {
     className,
     rootClassName,
     backgroundColor,
-    backgroundImage,
     backgroundImageOverlay,
-    alt = 'background image',
-    sizes,
+    alt = 'background image'
   } = props;
 
-  const getVariantNames = img => {
-    const { variants } = img?.attributes || {};
-    return variants ? Object.keys(variants) : [];
-  };
+  const carouselImages = [
+    {
+      id: '1',
+      type: 'imageAsset',
+      attributes: {
+        variants: {
+          default: { url: 'https://i.ibb.co/fzy65xyG/Screenshot-2025-03-04-at-19-44-02.png' },
+        },
+      },
+    },
+    {
+      id: '2',
+      type: 'imageAsset',
+      attributes: {
+        variants: {
+          default: { url: 'https://i.ibb.co/39RtpcTm/Screenshot-2025-03-04-at-19-43-47.png' },
+        },
+      },
+    },
+    {
+      id: '3',
+      type: 'imageAsset',
+      attributes: {
+        variants: {
+          default: { url: 'https://i.ibb.co/9ksxTjJx/Screenshot-2025-03-04-at-19-43-36.png' },
+        },
+      },
+    },
+  ];
 
   const backgroundColorMaybe = backgroundColor ? { backgroundColor } : {};
-  // On top of the background image there could be an overlay that mixes in some color (e.g. black)
-  // with the given opacity. Currently, there are 2 presets: "dark" and "darker".
-  // At this point this is used as a shader to add contrast between foreground text and background.
+
   const { preset, color: overlayColor, opacity: overlayOpacity } = backgroundImageOverlay || {};
-  const hasBackgroundOverlay = typeof preset === 'string' && preset !== 'none';
+  const effectiveOverlay = (preset && preset !== 'none')
+    ? { preset, color: overlayColor, opacity: overlayOpacity }
+    : null;
+  const hasBackgroundOverlay = effectiveOverlay !== null;
   const overlayStyle = hasBackgroundOverlay
-    ? { backgroundColor: overlayColor, opacity: overlayOpacity }
+    ? { backgroundColor: effectiveOverlay.color, opacity: effectiveOverlay.opacity }
     : {};
 
+  const IMAGE_GALLERY_OPTIONS = {
+    showPlayButton: false,
+    disableThumbnailScroll: true,
+    showThumbnails: false,
+    showFullscreenButton: true,
+    slideDuration: 350,
+    autoPlay: true,
+    slideInterval: 5000, // rotate every 5000ms
+    showBullets: true,   // display dots (bullets)
+    showIndex: false,    // hide the text index
+    infinite: true,
+    showNav: false
+  };
+
   const classes = classNames(rootClassName || css.backgroundImageWrapper, className);
+
   return (
     <div className={classes} style={backgroundColorMaybe}>
-      {backgroundImage ? (
-        <ResponsiveImage
-          className={css.backgroundImage}
-          ref={ref}
-          alt={alt}
-          image={backgroundImage}
-          variants={getVariantNames(backgroundImage)}
-          sizes={sizes}
-        />
-      ) : null}
-      {hasBackgroundOverlay ? <div className={css.backgroundOverlay} style={overlayStyle} /> : null}
+      {/* Render ImageCarousel directly – no extra clipping wrapper */}
+      <ImageCarousel 
+        images={carouselImages}
+        imageVariants={['default']}
+        {...IMAGE_GALLERY_OPTIONS}
+        rootClassName={css.carouselRoot}
+        className={css.backgroundImage}
+      />
+      {hasBackgroundOverlay && (
+        <div className={css.backgroundOverlay} style={overlayStyle} />
+      )}
+      <div className={css.customHeading}>
+        Every Frame Deserves a Stunning Location<br />
+        Find Yours Today!
+      </div>
     </div>
   );
 });
