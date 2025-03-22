@@ -11,18 +11,47 @@
 
 :global(.image-gallery-slide-wrapper) {
   background-color: var(--colorBlack);
-
-  @media (--viewportMedium) {
-    padding: 0 10%;
-  }
+  border-radius: 15px !important;
+  overflow: hidden !important;
+  /* no additional padding here */
 }
 
+/* (Optional) If the ReactImageGallery root element doesn’t inherit your border-radius,
+   you can apply it here as well */
+:global(.image-gallery-content) {
+  border-radius: 15px !important;
+}
+
+/* Global rules for the react-image-gallery bullets */
+:global(.image-gallery-bullets) {
+  display: block !important;         /* force display */
+  position: absolute !important;      
+  bottom: -40px !important;            /* adjust as needed */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: auto;
+  text-align: center;
+  z-index: 100 !important;             /* ensure bullets are on top */
+}
+
+/* (Optional) Adjust individual bullet colors if needed */
+:global(.image-gallery-bullet) button {
+  background-color: var(--colorGrey300); /* default color */
+  border: none;
+}
+
+:global(.image-gallery-bullet.active) button {
+  background-color: var(--colorWhite); /* active bullet color */
+}
+
+/* Ensure the carousel container doesn’t hide overflow */
 .root {
   position: relative;
   width: 100%;
   height: 100vh;
   padding: 0;
   background-color: var(--colorBlack);
+  overflow: visible;  /* allow bullets to be visible */
 
   @media (--viewportMedium) {
     padding: 100px 0;
@@ -43,8 +72,9 @@
 }
 
 .item {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .arrowHead {
@@ -132,6 +162,7 @@
   flex-direction: row;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .imageIndex {
@@ -152,4 +183,57 @@
     margin: 0;
     font-weight: var(--fontWeightSemiBold);
   }
+}
+
+/* Outer wrapper shows bullets while preserving spacing */
+.backgroundImageWrapper {
+  width: calc(100vw - 50px);  /* 100vw minus 25px margin on each side */
+  height: 60vh; 
+  margin: 25px auto;         /* center horizontally */
+  border-radius: 15px;
+  overflow: visible;         /* allow extra space for the bullets */
+  position: relative;
+  padding-bottom: 50px;       /* space for the bullets */
+}
+
+/* Remove the clipping container (or use it without overflow clipping) */
+/* If you still use it, set overflow: visible so bullets aren’t clipped */
+.carouselClip {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;   /* same as backgroundImageWrapper */
+  overflow: visible;     /* allow elements (bullets) to be visible */
+}
+
+/* Apply rounded corners directly to the ImageCarousel images */
+.backgroundImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+
+/* Also apply the rounded corners to the overlay */
+.backgroundOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 50px; /* leaves the extra 50px at the bottom uncovered */
+  border-radius: 15px;
+}
+
+/* Centered heading that appears on top */
+.customHeading {
+  position: absolute;
+  top: calc(50% - 25px); /* adjust to account for extra bottom space */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  text-align: center;
+  color: white;
+  font-size: 3.5rem;
+  font-weight: bold;
+  line-height: 1.5;
+  padding: 10px;
+  z-index: 2;
 }

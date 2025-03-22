@@ -5,6 +5,7 @@ import Field, { hasDataInFields } from '../../Field';
 
 import SectionContainer from '../SectionContainer';
 import css from './SectionHero.module.css';
+import TopbarSearchForm from '../../../TopbarContainer/Topbar/TopbarSearchForm/TopbarSearchForm';
 
 /**
  * @typedef {Object} FieldComponentConfig
@@ -33,6 +34,8 @@ import css from './SectionHero.module.css';
  * @param {Object?} props.callToAction
  * @param {Object} props.options extra options for the section component (e.g. custom fieldComponents)
  * @param {Object<string,FieldComponentConfig>?} props.options.fieldComponents custom fields
+ * @param {Object} props.appConfig your app configuration object
+ * @param {Function} props.handleSearch your function to process the search
  * @returns {JSX.Element} Section for article content
  */
 const SectionHero = props => {
@@ -46,10 +49,10 @@ const SectionHero = props => {
     appearance,
     callToAction,
     options,
+    appConfig,     
+    handleSearch,  
   } = props;
 
-  // If external mapping has been included for fields
-  // E.g. { h1: { component: MyAwesomeHeader } }
   const fieldComponents = options?.fieldComponents;
   const fieldOptions = { fieldComponents };
 
@@ -63,15 +66,22 @@ const SectionHero = props => {
       appearance={appearance}
       options={fieldOptions}
     >
+
       {hasHeaderFields ? (
         <header className={defaultClasses.sectionDetails}>
-          <Field data={title} className={defaultClasses.title} options={fieldOptions} />
-          <Field data={description} className={defaultClasses.description} options={fieldOptions} />
-          <Field data={callToAction} className={defaultClasses.ctaButton} options={fieldOptions} />
+          <div className={css.heroSearchContainer}>
+            <TopbarSearchForm
+              appConfig={''}
+              onSubmit={() => {}}
+              className={css.customTopbarSearchForm}
+            />
+          </div>
         </header>
       ) : null}
+ 
     </SectionContainer>
   );
 };
 
 export default SectionHero;
+

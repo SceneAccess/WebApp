@@ -25,7 +25,7 @@
   word-break: break-word;
 
   @media (--viewportMedium) {
-    padding: 64px 0;
+    padding: 10px 0 64px;
   }
 }
 

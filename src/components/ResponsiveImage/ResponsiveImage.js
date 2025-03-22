@@ -75,7 +75,6 @@ const ResponsiveImage = props => {
 
   if (image == null || variants.length === 0) {
     const noImageClasses = classNames(rootClassName || css.root, css.noImageContainer, className);
-
     const noImageMessageText = noImageMessage || <FormattedMessage id="ResponsiveImage.noImage" />;
     return (
       <div className={noImageClasses}>
@@ -92,14 +91,14 @@ const ResponsiveImage = props => {
   const srcSet = variants
     .map(variantName => {
       const variant = imageVariants[variantName];
-
       if (!variant) {
-        // Variant not available (most like just not loaded yet)
+        // Variant not available (likely not loaded yet)
         return null;
       }
-      return `${variant.url} ${variant.width}w`;
+      // If no width is provided, return just the URL.
+      return variant.width ? `${variant.url} ${variant.width}w` : variant.url;
     })
-    .filter(v => v != null)
+    .filter(v => v != null && v !== '')
     .join(', ');
 
   const imgProps = {
