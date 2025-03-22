@@ -7,75 +7,78 @@ import { isMainSearchTypeKeywords } from '../../../../util/search';
 
 import { Form, LocationAutocompleteInput } from '../../../../components';
 import BookingDateRangeFilter from '../../../SearchPage/BookingDateRangeFilter/BookingDateRangeFilter';
+import FilterComponent from '../../../SearchPage/FilterComponent'; // Import FilterComponent
 
 import css from './TopbarSearchForm.module.css';
 
 const TopbarSearchForm = props => {
   const searchInputRef = useRef(null);
   const intl = useIntl();
-  const { appConfig, onSubmit, ...restOfProps } = props;
+  const { filterConfig, onSubmit, ...restOfProps } = props;
 
-  const onLocationChange = location => {
-    if (!isMainSearchTypeKeywords(appConfig) && location.selectedPlace) {
-      onSubmit({ location });
-      searchInputRef?.current?.blur();
-    }
-  };
+  // Extract the Activities filter configuration
+  const activitiesFilterConfig =
+    filterConfig?.find(filter => filter.key === 'activities') || null;
 
-  const onDateRangeChange = dateRange => {
-    onSubmit({ dateRange });
-  };
+  if (activitiesFilterConfig && !activitiesFilterConfig.enumOptions) {
+    console.warn('Activities filter is missing enumOptions. Adding fallback options.'); // Debugging log
+
+    // Add fallback options
+    activitiesFilterConfig.enumOptions = [
+      { key: 'hiking', label: 'Hiking' },
+      { key: 'photography', label: 'Photography' },
+      { key: 'cooking', label: 'Cooking' },
+    ];
+  }
+
+  if (!activitiesFilterConfig) {
+    console.warn('Activities filter is not available'); // Debugging log
+  }
 
   const handleSubmit = values => {
-    // Send the form data to the backend
-    fetch('/api/search', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to submit search');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Search results:', data);
-        // Handle the search results (e.g., update state or redirect)
-      })
-      .catch(error => {
-        console.error('Error submitting search:', error);
-      });
+    console.log('Submitting form with values:', values);
+
+    // Redirect to SearchPage with selected filters
+    const searchParams = {
+      activities: values.activities,
+      location: values.location?.selectedPlace?.address || '',
+      dateRange: values.dateRange,
+    };
+
+    const queryString = new URLSearchParams(searchParams).toString();
+    window.location.href = `/search?${queryString}`;
   };
 
   return (
     <FinalForm
       {...restOfProps}
-      onSubmit={handleSubmit} // Use the custom submit handler
+      onSubmit={handleSubmit}
       render={formRenderProps => {
         const { rootClassName, className, handleSubmit } = formRenderProps;
         const classes = classNames(rootClassName, className, css.searchBarContainer);
 
         return (
           <Form className={classes} onSubmit={handleSubmit}>
-            {/* Activity Field */}
-            <div className={css.fieldContainer}>
-              <label className={css.fieldLabel}>
-                {intl.formatMessage({ id: 'TopbarSearchForm.label.activity' })}
-              </label>
-              <select name="activity" className={css.locationInput}>
-                <option value="photography">Photography</option>
-                <option value="hiking">Hiking</option>
-                <option value="cooking">Cooking</option>
-              </select>
-            </div>
+            {/* Activities Filter */}
+            {activitiesFilterConfig ? (
+              <div className={css.fieldContainer}>
+                <label className={css.fieldLabel}>
+                  {intl.formatMessage({ id: 'TopbarSearchForm.label.activities' })}
+                </label>
+                <FilterComponent
+                  idPrefix="TopbarSearchForm"
+                  config={activitiesFilterConfig}
+                  onSubmit={values => formRenderProps.form.change('activities', values)}
+                />
+              </div>
+            ) : (
+              <div>Loading Activities Filter...</div>
+            )}
 
             {/* Divider */}
             <div className={css.divider}></div>
 
-            {/* Destination Field */}
+            {/* Location Search Field */}
             <div className={css.fieldContainer}>
               <label className={css.fieldLabel}>
                 {intl.formatMessage({ id: 'TopbarSearchForm.label.destination' })}
@@ -89,7 +92,6 @@ const TopbarSearchForm = props => {
                     placeholder={intl.formatMessage({ id: 'TopbarSearchForm.placeholder.destination' })}
                     inputRef={searchInputRef}
                     input={input}
-                    onChange={onLocationChange}
                   />
                 )}
               />
@@ -98,7 +100,7 @@ const TopbarSearchForm = props => {
             {/* Divider */}
             <div className={css.divider}></div>
 
-            {/* Date Field */}
+            {/* Booking Date Selector */}
             <div className={css.fieldContainer}>
               <label className={css.fieldLabel}>
                 {intl.formatMessage({ id: 'TopbarSearchForm.label.date' })}
@@ -106,7 +108,7 @@ const TopbarSearchForm = props => {
               <BookingDateRangeFilter
                 id="TopbarSearchForm.dateRange"
                 className={css.dateRangeFilter}
-                onChange={onDateRangeChange}
+                onChange={values => formRenderProps.form.change('dateRange', values)}
                 intl={intl}
               />
             </div>
