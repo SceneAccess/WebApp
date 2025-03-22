@@ -6,164 +6,115 @@ import { useIntl } from '../../../../util/reactIntl';
 import { isMainSearchTypeKeywords } from '../../../../util/search';
 
 import { Form, LocationAutocompleteInput } from '../../../../components';
+import BookingDateRangeFilter from '../../../SearchPage/BookingDateRangeFilter/BookingDateRangeFilter';
 
-import IconSearchDesktop from './IconSearchDesktop';
 import css from './TopbarSearchForm.module.css';
 
-const identity = v => v;
-
-const KeywordSearchField = props => {
-  const { keywordSearchWrapperClasses, iconClass, intl, isMobile = false, inputRef } = props;
-  return (
-    <div className={keywordSearchWrapperClasses}>
-      <button className={css.searchSubmit}>
-        <div className={iconClass}>
-          <IconSearchDesktop />
-        </div>
-      </button>
-      <Field
-        name="keywords"
-        render={({ input, meta }) => {
-          return (
-            <input
-              className={isMobile ? css.mobileInput : css.desktopInput}
-              {...input}
-              id={isMobile ? 'keyword-search-mobile' : 'keyword-search'}
-              data-testid={isMobile ? 'keyword-search-mobile' : 'keyword-search'}
-              ref={inputRef}
-              type="text"
-              placeholder={intl.formatMessage({
-                id: 'TopbarSearchForm.placeholder',
-              })}
-              autoComplete="off"
-            />
-          );
-        }}
-      />
-    </div>
-  );
-};
-
-const LocationSearchField = props => {
-  const { desktopInputRootClass, intl, isMobile = false, inputRef, onLocationChange } = props;
-  return (
-    <Field
-      name="location"
-      format={identity}
-      render={({ input, meta }) => {
-        const { onChange, ...restInput } = input;
-
-        // Merge the standard onChange function with custom behaviur. A better solution would
-        // be to use the FormSpy component from Final Form and pass onChange to the
-        // onChange prop but that breaks due to insufficient subscription handling.
-        // See: https://github.com/final-form/react-final-form/issues/159
-        const searchOnChange = value => {
-          onChange(value);
-          onLocationChange(value);
-        };
-
-        return (
-          <LocationAutocompleteInput
-            className={isMobile ? css.mobileInputRoot : desktopInputRootClass}
-            iconClassName={isMobile ? css.mobileIcon : css.desktopIcon}
-            inputClassName={isMobile ? css.mobileInput : css.desktopInput}
-            predictionsClassName={isMobile ? css.mobilePredictions : css.desktopPredictions}
-            predictionsAttributionClassName={isMobile ? css.mobilePredictionsAttribution : null}
-            placeholder={intl.formatMessage({ id: 'TopbarSearchForm.placeholder' })}
-            closeOnBlur={!isMobile}
-            inputRef={inputRef}
-            input={{ ...restInput, onChange: searchOnChange }}
-            meta={meta}
-          />
-        );
-      }}
-    />
-  );
-};
-
-/**
- * The main search form for the Topbar.
- *
- * @component
- * @param {Object} props
- * @param {string?} props.className add more style rules in addition to components own css.root
- * @param {string?} props.rootClassName overwrite components own css.root
- * @param {string?} props.desktopInputRoot root class for desktop form input
- * @param {Function} props.onSubmit
- * @param {boolean} props.isMobile
- * @param {Object} props.appConfig
- * @returns {JSX.Element} search form element
- */
 const TopbarSearchForm = props => {
-  const searchInpuRef = useRef(null);
+  const searchInputRef = useRef(null);
   const intl = useIntl();
   const { appConfig, onSubmit, ...restOfProps } = props;
 
-  const onChange = location => {
+  const onLocationChange = location => {
     if (!isMainSearchTypeKeywords(appConfig) && location.selectedPlace) {
-      // Note that we use `onSubmit` instead of the conventional
-      // `handleSubmit` prop for submitting. We want to autosubmit
-      // when a place is selected, and don't require any extra
-      // validations for the form.
       onSubmit({ location });
-      // blur search input to hide software keyboard
-      searchInpuRef?.current?.blur();
+      searchInputRef?.current?.blur();
     }
   };
 
-  const onKeywordSubmit = values => {
-    if (isMainSearchTypeKeywords(appConfig)) {
-      onSubmit({ keywords: values.keywords });
-      // blur search input to hide software keyboard
-      searchInpuRef?.current?.blur();
-    }
+  const onDateRangeChange = dateRange => {
+    onSubmit({ dateRange });
   };
 
-  const isKeywordsSearch = isMainSearchTypeKeywords(appConfig);
-  const submit = isKeywordsSearch ? onKeywordSubmit : onSubmit;
+  const handleSubmit = values => {
+    // Send the form data to the backend
+    fetch('/api/search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to submit search');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Search results:', data);
+        // Handle the search results (e.g., update state or redirect)
+      })
+      .catch(error => {
+        console.error('Error submitting search:', error);
+      });
+  };
+
   return (
     <FinalForm
       {...restOfProps}
-      onSubmit={submit}
+      onSubmit={handleSubmit} // Use the custom submit handler
       render={formRenderProps => {
-        const {
-          rootClassName,
-          className,
-          desktopInputRoot,
-          isMobile = false,
-          handleSubmit,
-        } = formRenderProps;
-        const classes = classNames(rootClassName, className);
-        const desktopInputRootClass = desktopInputRoot || css.desktopInputRoot;
-
-        // Location search: allow form submit only when the place has changed
-        const preventFormSubmit = e => e.preventDefault();
-        const submitFormFn = isKeywordsSearch ? handleSubmit : preventFormSubmit;
-
-        const keywordSearchWrapperClasses = classNames(
-          css.keywordSearchWrapper,
-          isMobile ? css.mobileInputRoot : desktopInputRootClass
-        );
+        const { rootClassName, className, handleSubmit } = formRenderProps;
+        const classes = classNames(rootClassName, className, css.searchBarContainer);
 
         return (
-          <Form className={classes} onSubmit={submitFormFn} enforcePagePreloadFor="SearchPage">
-            {isKeywordsSearch ? (
-              <KeywordSearchField
-                keywordSearchWrapperClasses={keywordSearchWrapperClasses}
-                iconClass={classNames(isMobile ? css.mobileIcon : css.desktopIcon || css.icon)}
-                intl={intl}
-                isMobile={isMobile}
-                inputRef={searchInpuRef}
+          <Form className={classes} onSubmit={handleSubmit}>
+            {/* Activity Field */}
+            <div className={css.fieldContainer}>
+              <label className={css.fieldLabel}>
+                {intl.formatMessage({ id: 'TopbarSearchForm.label.activity' })}
+              </label>
+              <select name="activity" className={css.locationInput}>
+                <option value="photography">Photography</option>
+                <option value="hiking">Hiking</option>
+                <option value="cooking">Cooking</option>
+              </select>
+            </div>
+
+            {/* Divider */}
+            <div className={css.divider}></div>
+
+            {/* Destination Field */}
+            <div className={css.fieldContainer}>
+              <label className={css.fieldLabel}>
+                {intl.formatMessage({ id: 'TopbarSearchForm.label.destination' })}
+              </label>
+              <Field
+                name="location"
+                format={v => v}
+                render={({ input }) => (
+                  <LocationAutocompleteInput
+                    className={css.locationInput}
+                    placeholder={intl.formatMessage({ id: 'TopbarSearchForm.placeholder.destination' })}
+                    inputRef={searchInputRef}
+                    input={input}
+                    onChange={onLocationChange}
+                  />
+                )}
               />
-            ) : (
-              <LocationSearchField
-                desktopInputRootClass={desktopInputRootClass}
+            </div>
+
+            {/* Divider */}
+            <div className={css.divider}></div>
+
+            {/* Date Field */}
+            <div className={css.fieldContainer}>
+              <label className={css.fieldLabel}>
+                {intl.formatMessage({ id: 'TopbarSearchForm.label.date' })}
+              </label>
+              <BookingDateRangeFilter
+                id="TopbarSearchForm.dateRange"
+                className={css.dateRangeFilter}
+                onChange={onDateRangeChange}
                 intl={intl}
-                isMobile={isMobile}
-                inputRef={searchInpuRef}
-                onLocationChange={onChange}
               />
-            )}
+            </div>
+
+            {/* Search Button */}
+            <button type="submit" className={css.searchButton}>
+              {intl.formatMessage({ id: 'TopbarSearchForm.searchButton' })}
+            </button>
           </Form>
         );
       }}
