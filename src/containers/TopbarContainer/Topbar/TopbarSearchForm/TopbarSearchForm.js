@@ -61,60 +61,73 @@ const TopbarSearchForm = props => {
         return (
           <Form className={classes} onSubmit={handleSubmit}>
             {/* Activity Field */}
-            <div className={css.fieldContainer}>
-              <label className={css.fieldLabel}>
-                {intl.formatMessage({ id: 'TopbarSearchForm.label.activity' })}
-              </label>
-              <select name="activity" className={css.locationInput}>
-                <option value="photography">Photography</option>
-                <option value="hiking">Hiking</option>
-                <option value="cooking">Cooking</option>
-              </select>
+            <div className={classNames(css.fieldContainer, css.equalWidth)}>
+              <div className={css.inputWrapper}>
+                <div className={css.iconSearchFilterWrapper}>
+                <img className={css.iconSearchFilter} src="https://i.ibb.co/CstpZ12c/video-camera-front.png" alt="video-camera-front" border="0"/>
+                </div>
+                <select name="activity" className={css.locationInput} style placeholder="Activity">
+                  <option value="" disabled selected hidden>Activity</option>
+                  <option value="photography">Photography</option>
+                  <option value="hiking">Hiking</option>
+                  <option value="cooking">Cooking</option>
+                </select>
+                <div className={css.dropdownIcon}></div>
+              </div>
             </div>
 
             {/* Divider */}
             <div className={css.divider}></div>
 
             {/* Destination Field */}
-            <div className={css.fieldContainer}>
-              <label className={css.fieldLabel}>
-                {intl.formatMessage({ id: 'TopbarSearchForm.label.destination' })}
-              </label>
-              <Field
-                name="location"
-                format={v => v}
-                render={({ input }) => (
-                  <LocationAutocompleteInput
-                    className={css.locationInput}
-                    placeholder={intl.formatMessage({ id: 'TopbarSearchForm.placeholder.destination' })}
-                    inputRef={searchInputRef}
-                    input={input}
-                    onChange={onLocationChange}
-                  />
-                )}
-              />
+            <div className={classNames(css.fieldContainer, css.equalWidth)}>
+              <div className={css.inputWrapper}>
+                <div className={css.iconSearchFilterWrapper}>                
+                  <img className={css.iconSearchFilter} src="https://i.ibb.co/PGTT8GXs/Location.png" alt="Location" border="0" />
+                </div>
+                <Field
+                  name="location"
+                  format={v => v}
+                  render={({ input }) => (
+                    <LocationAutocompleteInput
+                      className={css.locationInput}
+                      placeholder="Enter a destination"
+                      inputRef={searchInputRef}
+                      input={input}
+                      onChange={onLocationChange}
+                    />
+                  )}
+                />
+                <div className={css.dropdownIcon}></div>
+              </div>
             </div>
 
             {/* Divider */}
             <div className={css.divider}></div>
 
             {/* Date Field */}
-            <div className={css.fieldContainer}>
-              <label className={css.fieldLabel}>
-                {intl.formatMessage({ id: 'TopbarSearchForm.label.date' })}
-              </label>
-              <BookingDateRangeFilter
-                id="TopbarSearchForm.dateRange"
-                className={css.dateRangeFilter}
-                onChange={onDateRangeChange}
-                intl={intl}
-              />
+            <div className={classNames(css.fieldContainer, css.equalWidth)}>
+              <div className={css.inputWrapper}>
+                <div className={css.iconSearchFilterWrapper}>
+                  <img className={css.iconSearchFilter} src="https://i.ibb.co/S74xQg1z/Calendar.png" alt="Calendar" border="0"/>
+                </div>
+                <BookingDateRangeFilter
+                  id="TopbarSearchForm.dateRange"
+                  className={css.locationInput} // Use the same class as locationInput
+                  placeholder="Dates"
+                  onChange={onDateRangeChange}
+                  intl={intl}
+                />
+                <div className={css.dropdownIcon}></div>
+              </div>
             </div>
 
             {/* Search Button */}
-            <button type="submit" className={css.searchButton}>
-              {intl.formatMessage({ id: 'TopbarSearchForm.searchButton' })}
-            </button>
+            <div className={classNames(css.fieldContainer, css.equalWidth)}>
+              <button type="submit" className={css.searchButton}>
+                {intl.formatMessage({ id: 'TopbarSearchForm.searchButton' })}
+              </button>
+            </div>
           </Form>
         );
       }}

@@ -523,13 +523,14 @@ class LocationAutocompleteInputImplementation extends Component {
 
     return (
       <div className={rootClass}>
-        <div className={iconClass}>
+        {/* Commenting out the empty div */}
+        {/* <div className={iconClass}>
           {this.state.fetchingPlaceDetails ? (
             <IconSpinner className={css.iconSpinner} />
           ) : (
             <IconHourGlass />
           )}
-        </div>
+        </div> */}
         <input
           className={inputClass}
           type="search"
