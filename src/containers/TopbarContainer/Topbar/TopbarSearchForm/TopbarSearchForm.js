@@ -62,18 +62,18 @@ const TopbarSearchForm = props => {
           <Form className={classes} onSubmit={handleSubmit}>
             {/* Activity Field */}
             <div className={classNames(css.fieldContainer, css.equalWidth)}>
-              <div className={css.inputWrapper}>
+              <label className={css.inputWrapper}>
                 <div className={css.iconSearchFilterWrapper}>
-                <img className={css.iconSearchFilter} src="https://i.ibb.co/CstpZ12c/video-camera-front.png" alt="video-camera-front" border="0"/>
+                  <img className={css.iconSearchFilter} src="https://i.ibb.co/CstpZ12c/video-camera-front.png" alt="video-camera-front" border="0"/>
                 </div>
-                <select name="activity" className={css.locationInput} style placeholder="Activity">
+                <select name="activity" className={css.inputField} placeholder="Activity">
                   <option value="" disabled selected hidden>Activity</option>
                   <option value="photography">Photography</option>
                   <option value="hiking">Hiking</option>
                   <option value="cooking">Cooking</option>
                 </select>
                 <div className={css.dropdownIcon}></div>
-              </div>
+              </label>
             </div>
 
             {/* Divider */}
@@ -81,7 +81,7 @@ const TopbarSearchForm = props => {
 
             {/* Destination Field */}
             <div className={classNames(css.fieldContainer, css.equalWidth)}>
-              <div className={css.inputWrapper}>
+              <label className={css.inputWrapper}>
                 <div className={css.iconSearchFilterWrapper}>                
                   <img className={css.iconSearchFilter} src="https://i.ibb.co/PGTT8GXs/Location.png" alt="Location" border="0" />
                 </div>
@@ -90,7 +90,7 @@ const TopbarSearchForm = props => {
                   format={v => v}
                   render={({ input }) => (
                     <LocationAutocompleteInput
-                      className={css.locationInput}
+                      className={css.inputField}
                       placeholder="Enter a destination"
                       inputRef={searchInputRef}
                       input={input}
@@ -99,7 +99,7 @@ const TopbarSearchForm = props => {
                   )}
                 />
                 <div className={css.dropdownIcon}></div>
-              </div>
+              </label>
             </div>
 
             {/* Divider */}
@@ -107,19 +107,19 @@ const TopbarSearchForm = props => {
 
             {/* Date Field */}
             <div className={classNames(css.fieldContainer, css.equalWidth)}>
-              <div className={css.inputWrapper}>
+              <label className={css.inputWrapper}>
                 <div className={css.iconSearchFilterWrapper}>
                   <img className={css.iconSearchFilter} src="https://i.ibb.co/S74xQg1z/Calendar.png" alt="Calendar" border="0"/>
                 </div>
                 <BookingDateRangeFilter
                   id="TopbarSearchForm.dateRange"
-                  className={css.locationInput} // Use the same class as locationInput
+                  className={css.inputField} // Use the same class as locationInput
                   placeholder="Dates"
                   onChange={onDateRangeChange}
                   intl={intl}
                 />
                 <div className={css.dropdownIcon}></div>
-              </div>
+              </label>
             </div>
 
             {/* Search Button */}
