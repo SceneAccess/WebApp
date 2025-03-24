@@ -1,14 +1,54 @@
 .root {
-  /* SectionContainer defaults */
+  width: 100%;
+  margin: 0 auto; /* Center the section */
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px); /* Full viewport height minus NavBar height */
+}
+
+.imageDiv {
+  width: 100%;
+  flex: 1; /* Take up remaining space */
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  width: 100%;
-  position: relative;
+}
 
-  /* Hero specific */
-  min-height: 80vh;
+.titleDiv {
+  flex: 0 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: black; /* Set text color to black */
+  background-color: #fff; /* Optional background for contrast */
 }
+
+.customSearchWrapper {
+  margin: 10px auto; /* reduced margin from the previous 20px auto */
+  width: 80%;
+  /* any additional layout styling for the container */
+}
+
+.customTopbarSearchForm {
+  width: 80vw;
+  margin: 0 auto; /* Center horizontally */
+  background-color: #e6e6e6; /* Light grey background */
+  border: 1px solid #c0c0c0; /* Dark grey border */
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.heroSearchContainer {
+  background-color: transparent;
+  border: rgba(238, 238, 238, 0.201) 1px solid;
+  width: calc(100vw - 70px); /* Match the width of the carousel */
+  height: auto;
+  border-radius: 20px; /* Match the border-radius of the carousel */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 45px 0;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1); /* Inner shadow effect */
+  margin-top: -5px ;
+}
+

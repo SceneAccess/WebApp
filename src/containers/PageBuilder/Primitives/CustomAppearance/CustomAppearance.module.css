@@ -1,20 +1,67 @@
 .backgroundImageWrapper {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  width: calc(100vw - 70px); /* Match the width of the heroSearchContainer */
+  height: 100%;
+  margin: 35px auto; /* Center horizontally */
+  border-radius: 20px;
+  overflow: visible; /* important: allow absolutely positioned bullets to be seen */
+  position: relative;
 }
 
-.backgroundImage {
-  object-fit: cover;
+.carouselClip {
   width: 100%;
   height: 100%;
+  border-radius: 20px; /* same as backgroundImageWrapper */
+  overflow: hidden;
+}
+
+/* This class is passed as `className` to ImageCarousel */
+.backgroundImage {
+  width: 100%;
+  height: 100%;
+}
+
+.carouselRoot {
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure the overlaid heading is centered */
+.customHeading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  text-align: center;
+  color: white;
+  font-size: 3.5rem;
+  font-weight: bold;
+  line-height: 1.5;
+  padding: 10px;
+  z-index: 2;
+}
+
+/* Responsive adjustments for .customHeading */
+@media (max-width: 768px) {
+  .customHeading {
+    font-size: 2.5rem; /* smaller font size for tablets and small screens */
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .customHeading {
+    font-size: 1.8rem; /* even smaller font size for mobile phones */
+    padding: 5px;
+  }
 }
 
 .backgroundOverlay {
   position: absolute;
   top: 0;
-  width: 100%;
-  height: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 20px; /* match the outer container */
+  z-index: 1; /* lower than the heading and bullets */
 }
