@@ -7,7 +7,7 @@ import { isMainSearchTypeKeywords } from '../../../../util/search';
 
 import { Form, LocationAutocompleteInput } from '../../../../components';
 import BookingDateRangeFilter from '../../../SearchPage/BookingDateRangeFilter/BookingDateRangeFilter';
-import FilterComponent from '../../../SearchPage/FilterComponent'; // Import FilterComponent
+import FilterComponent from '../../../SearchPage/FilterComponent';
 
 import css from './TopbarSearchForm.module.css';
 
@@ -16,14 +16,11 @@ const TopbarSearchForm = props => {
   const intl = useIntl();
   const { filterConfig, onSubmit, ...restOfProps } = props;
 
-  // Extract the Activities filter configuration
   const activitiesFilterConfig =
     filterConfig?.find(filter => filter.key === 'activities') || null;
 
   if (activitiesFilterConfig && !activitiesFilterConfig.enumOptions) {
-    console.warn('Activities filter is missing enumOptions. Adding fallback options.'); // Debugging log
-
-    // Add fallback options
+    console.warn('Activities filter is missing enumOptions. Adding fallback options.');
     activitiesFilterConfig.enumOptions = [
       { key: 'hiking', label: 'Hiking' },
       { key: 'photography', label: 'Photography' },
@@ -32,13 +29,12 @@ const TopbarSearchForm = props => {
   }
 
   if (!activitiesFilterConfig) {
-    console.warn('Activities filter is not available'); // Debugging log
+    console.warn('Activities filter is not available');
   }
 
   const handleSubmit = values => {
     console.log('Submitting form with values:', values);
 
-    // Redirect to SearchPage with selected filters
     const searchParams = {
       activities: values.activities,
       location: values.location?.selectedPlace?.address || '',
@@ -54,13 +50,13 @@ const TopbarSearchForm = props => {
       {...restOfProps}
       onSubmit={handleSubmit}
       render={formRenderProps => {
-        const { rootClassName, className, handleSubmit } = formRenderProps;
+        const { rootClassName, className, handleSubmit, form } = formRenderProps;
         const classes = classNames(rootClassName, className, css.searchBarContainer);
 
         return (
           <Form className={classes} onSubmit={handleSubmit}>
-            {/* Activities Filter */}
-            {activitiesFilterConfig ? (
+            {/* Activity Field */}
+            {activitiesFilterConfig && (
               <div className={css.fieldContainer}>
                 <label className={css.fieldLabel}>
                   {intl.formatMessage({ id: 'TopbarSearchForm.label.activities' })}
@@ -68,55 +64,70 @@ const TopbarSearchForm = props => {
                 <FilterComponent
                   idPrefix="TopbarSearchForm"
                   config={activitiesFilterConfig}
-                  onSubmit={values => formRenderProps.form.change('activities', values)}
+                  onSubmit={values => form.change('activities', values)}
                 />
               </div>
-            ) : (
-              <div>Loading Activities Filter...</div>
             )}
 
-            {/* Divider */}
             <div className={css.divider}></div>
 
-            {/* Location Search Field */}
-            <div className={css.fieldContainer}>
-              <label className={css.fieldLabel}>
-                {intl.formatMessage({ id: 'TopbarSearchForm.label.destination' })}
-              </label>
-              <Field
-                name="location"
-                format={v => v}
-                render={({ input }) => (
-                  <LocationAutocompleteInput
-                    className={css.locationInput}
-                    placeholder={intl.formatMessage({ id: 'TopbarSearchForm.placeholder.destination' })}
-                    inputRef={searchInputRef}
-                    input={input}
+            {/* Destination Field */}
+            <div className={classNames(css.fieldContainer, css.equalWidth)}>
+              <label className={css.inputWrapper}>
+                <div className={css.iconSearchFilterWrapper}>
+                  <img
+                    className={css.iconSearchFilter}
+                    src="https://i.ibb.co/PGTT8GXs/Location.png"
+                    alt="Location"
+                    border="0"
                   />
-                )}
-              />
+                </div>
+                <Field
+                  name="location"
+                  format={v => v}
+                  render={({ input }) => (
+                    <LocationAutocompleteInput
+                      className={css.inputField}
+                      placeholder="Enter a destination"
+                      inputRef={searchInputRef}
+                      input={input}
+                    />
+                  )}
+                />
+                <div className={css.dropdownIcon}></div>
+              </label>
             </div>
 
-            {/* Divider */}
             <div className={css.divider}></div>
 
-            {/* Booking Date Selector */}
-            <div className={css.fieldContainer}>
-              <label className={css.fieldLabel}>
-                {intl.formatMessage({ id: 'TopbarSearchForm.label.date' })}
+            {/* Date Field */}
+            <div className={classNames(css.fieldContainer, css.equalWidth)}>
+              <label className={css.inputWrapper}>
+                <div className={css.iconSearchFilterWrapper}>
+                  <img
+                    className={css.iconSearchFilter}
+                    src="https://i.ibb.co/S74xQg1z/Calendar.png"
+                    alt="Calendar"
+                    border="0"
+                  />
+                </div>
+                <BookingDateRangeFilter
+                  id="TopbarSearchForm.dateRange"
+                  className={css.inputField}
+                  placeholder="Dates"
+                  onChange={value => form.change('dateRange', value)}
+                  intl={intl}
+                />
+                <div className={css.dropdownIcon}></div>
               </label>
-              <BookingDateRangeFilter
-                id="TopbarSearchForm.dateRange"
-                className={css.dateRangeFilter}
-                onChange={values => formRenderProps.form.change('dateRange', values)}
-                intl={intl}
-              />
             </div>
 
             {/* Search Button */}
-            <button type="submit" className={css.searchButton}>
-              {intl.formatMessage({ id: 'TopbarSearchForm.searchButton' })}
-            </button>
+            <div className={classNames(css.fieldContainer, css.equalWidth)}>
+              <button type="submit" className={css.searchButton}>
+                {intl.formatMessage({ id: 'TopbarSearchForm.searchButton' })}
+              </button>
+            </div>
           </Form>
         );
       }}

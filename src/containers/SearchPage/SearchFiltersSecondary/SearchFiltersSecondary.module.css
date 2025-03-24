@@ -77,7 +77,7 @@
 
   &:focus,
   &:hover {
-    color: var(--colorGrey700);
+    color: red;
   }
 }
 

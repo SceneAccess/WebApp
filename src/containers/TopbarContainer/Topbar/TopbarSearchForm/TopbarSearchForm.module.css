@@ -207,67 +207,125 @@
   }
 }
 
+/* Container for the search bar */
 .searchBarContainer {
   display: flex;
-  align-items: flex-start; /* Align fields and labels to the top */
+  align-items: center;
   justify-content: space-between;
-  background-color: transparent; /* Keep background transparent */
-  border: none; /* No outer border */
-  padding: 0; /* No padding */
-  gap: 32px; /* Space between elements */
-  max-width: 1200px; /* Limit the width of the search bar */
-  margin: 0 auto; /* Center the search bar horizontally */
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Container for each field */
 .fieldContainer {
   display: flex;
-  flex-direction: column; /* Stack label and input vertically */
-  align-items: flex-start; /* Align label and input to the left */
-  gap: 4px; /* Space between label and input */
+  flex-direction: column;
+  flex-grow: 1; /* Ensure the field container grows to fill available space */
 }
 
-.fieldLabel {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333; /* Darker gray for labels */
-  margin-bottom: 4px; /* Add spacing below the label */
+/* Wrapper for input fields with icons */
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border: none; /* Remove border from the wrapper */
+  border-radius: 4px; /* Add border radius to the wrapper */
+  padding: 0 10px; /* Add padding to the wrapper */
+  background-color: #fff; /* Set background color to white */
+  cursor: pointer; /* Make the entire wrapper clickable */
+  flex-grow: 1; /* Ensure the input wrapper grows to fill available space */
 }
 
+/* Icon styling */
+.icon {
+  margin-right: 8px;
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.iconSearchFilter {
+  width: 24px;
+  margin-right: 8px; /* Add margin to the right of the icon */
+}
+
+/* Dropdown icon styling */
+.dropdownIcon {
+  position: absolute;
+  right: 10px;
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('../../../../assets/icons/dropdown-icon.png');
+  pointer-events: none; /* Allow clicks to pass through to the select element */
+}
+
+/* Ensure all fields have equal width */
+.equalWidth {
+  flex: 1;
+}
+
+/* Location and date fields */
 .locationField,
 .dateField {
   flex: 1; /* Equal width for location and date fields */
 }
 
+/* Search button styling */
 .searchButton {
-  background-color: #007bff; /* Blue background */
-  color: #fff; /* White text */
-  border: none; /* Remove border */
-  border-radius: 4px; /* Rounded corners */
-  padding: 12px 24px; /* Padding inside the button */
-  cursor: pointer; /* Pointer cursor on hover */
-  font-size: 16px; /* Font size */
-  font-weight: 600; /* Bold text */
-  flex-shrink: 0; /* Prevent the button from shrinking */
+  background-color: #0066ff;
+  color: #fff;
+  padding: 10px 20px;
+  margin-left: 40px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0; /* Prevent the search button from shrinking */
 }
 
 .searchButton:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056d1;
 }
 
+/* Input fields styling */
+.locationInput,
+.dateRangeFilter,
+select {
+  padding: 10px;
+  border: none; /* Remove border */
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%; /* Ensure the input takes full width */
+  box-shadow: none; /* Remove box-shadow */
+  color: var(--colorGrey); /* Set font color to light grey */
+  background: transparent; /* Remove background color */
+  appearance: none; /* Remove default dropdown indicator */
+  -webkit-appearance: none; /* Remove default dropdown indicator in Safari */
+  -moz-appearance: none; /* Remove default dropdown indicator in Firefox */
+  cursor: pointer; /* Make the input field clickable */
+}
+
+/* Specific styling for location and date range inputs */
 .locationInput,
 .dateRangeFilter {
   width: 100%; /* Ensure the input takes full width */
   padding: 8px 0; /* Remove padding around the input */
   border: none; /* Remove all borders */
-  border-bottom: 2px solid #ccc; /* Add only a bottom border for styling */
   font-size: 14px; /* Font size */
   background: transparent; /* Remove background color */
+  box-shadow: none; /* Remove box-shadow */
+  color: var(--colorGrey); /* Set font color to light grey */
 }
 
 .locationInput:focus,
 .dateRangeFilter:focus {
-  border-bottom: 2px solid #007bff; /* Highlight bottom border on focus */
   outline: none; /* Remove default focus outline */
+  box-shadow: none; /* Remove box-shadow on focus */
 }
 
 /* Remove the search icon from the location input */
@@ -275,12 +333,22 @@
   display: none !important; /* Ensure the icon is completely hidden */
 }
 
+/* Remove border and dropdown indicator for activity filter */
+select {
+  border: none; /* Remove border */
+  background: transparent; /* Remove background color */
+  appearance: none; /* Remove default dropdown indicator */
+  -webkit-appearance: none; /* Remove default dropdown indicator in Safari */
+  -moz-appearance: none; /* Remove default dropdown indicator in Firefox */
+  color: var(--colorGrey); /* Set font color to light grey */
+}
+
 /* Divider between fields */
 .divider {
-  height: 40px;
   width: 1px;
+  height: 40px;
   background-color: #ddd;
-  margin: 0 16px;
+  margin: 0 20px;
 }
 
 /* Responsive Design */

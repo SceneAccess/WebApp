@@ -4,7 +4,7 @@
   position: relative;
   display: flex;
 }
-
+/*
 .icon {
   display: flex;
   width: 24px;
@@ -31,13 +31,17 @@
   width: 23px;
 }
 
+*/
+
 .input {
   flex-grow: 1;
-  height: 50px;
+  height: auto;
   padding-left: 10px;
   margin: 0;
   line-height: unset;
   border-bottom-width: 2px;
+  background-color: transparent;
+  border: none;
 
   /* Safari bugfix: without this Safari will print placeholder to a wrong place */
   &::-webkit-input-placeholder {
