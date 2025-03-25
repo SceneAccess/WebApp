@@ -505,6 +505,12 @@ export class SearchPageComponent extends Component {
                     />
                   );
                 })}
+                {/* Add the Activities filter */}
+                <FilterComponent
+                  idPrefix="SearchFiltersPrimary"
+                  config={defaultFiltersConfig.find(filter => filter.key === 'activities')}
+                  onSubmit={this.applyFilters}
+                />
               </SearchFiltersPrimary>
             </MainPanelHeader>
             {isSecondaryFiltersOpen ? (
@@ -655,6 +661,9 @@ const EnhancedSearchPage = props => {
       />
     );
   }
+
+  const { searchParams } = this.props;
+  console.log('Search Params:', searchParams); // Debugging log
 
   return (
     <SearchPageComponent

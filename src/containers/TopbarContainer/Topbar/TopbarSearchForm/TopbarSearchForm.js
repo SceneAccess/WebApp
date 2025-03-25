@@ -7,6 +7,7 @@ import { isMainSearchTypeKeywords } from '../../../../util/search';
 
 import { Form, LocationAutocompleteInput } from '../../../../components';
 import BookingDateRangeFilter from '../../../SearchPage/BookingDateRangeFilter/BookingDateRangeFilter';
+import SearchFiltersPrimary from '../../../SearchPage/SearchFiltersPrimary/SearchFiltersPrimary';
 import FilterComponent from '../../../SearchPage/FilterComponent';
 
 import css from './TopbarSearchForm.module.css';
@@ -21,6 +22,8 @@ const TopbarSearchForm = props => {
 
   if (activitiesFilterConfig && !activitiesFilterConfig.enumOptions) {
     console.warn('Activities filter is missing enumOptions. Adding fallback options.');
+
+    // Add fallback options
     activitiesFilterConfig.enumOptions = [
       { key: 'hiking', label: 'Hiking' },
       { key: 'photography', label: 'Photography' },
@@ -35,15 +38,34 @@ const TopbarSearchForm = props => {
   const handleSubmit = values => {
     console.log('Submitting form with values:', values);
 
+    const dateRange = values.dateRange
+      ? `${values.dateRange.startDate},${values.dateRange.endDate}`
+      : '';
+
     const searchParams = {
       activities: values.activities,
       location: values.location?.selectedPlace?.address || '',
-      dateRange: values.dateRange,
+      dateRange,
     };
 
     const queryString = new URLSearchParams(searchParams).toString();
+    console.log('Generated Query String:', queryString); // Debugging log
     window.location.href = `/search?${queryString}`;
   };
+
+  const { searchParams } = this.props;
+
+  const dateRange = searchParams.dateRange
+    ? searchParams.dateRange.split(',').map(date => new Date(date))
+    : null;
+
+  console.log('Parsed Date Range:', dateRange); // Debugging log
+
+  // Apply the date range filter to the listings
+  if (dateRange) {
+    const [startDate, endDate] = dateRange;
+    // Filter logic here
+  }
 
   return (
     <FinalForm
@@ -55,19 +77,16 @@ const TopbarSearchForm = props => {
 
         return (
           <Form className={classes} onSubmit={handleSubmit}>
-            {/* Activity Field */}
-            {activitiesFilterConfig && (
-              <div className={css.fieldContainer}>
-                <label className={css.fieldLabel}>
-                  {intl.formatMessage({ id: 'TopbarSearchForm.label.activities' })}
-                </label>
+            <SearchFiltersPrimary>
+              {/* Render the Activities filter */}
+              {activitiesFilterConfig && (
                 <FilterComponent
                   idPrefix="TopbarSearchForm"
                   config={activitiesFilterConfig}
                   onSubmit={values => form.change('activities', values)}
                 />
-              </div>
-            )}
+              )}
+            </SearchFiltersPrimary>
 
             <div className={css.divider}></div>
 

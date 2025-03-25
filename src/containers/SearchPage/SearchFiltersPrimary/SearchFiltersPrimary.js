@@ -14,7 +14,7 @@ import css from './SearchFiltersPrimary.module.css';
  * @param {Object} props
  * @param {string} [props.rootClassName] - Custom class that overrides the default class for the root element
  * @param {string} [props.className] - Custom class that extends the default class for the root element
- * @param {React.Node} props.children - The children
+ * @param {React.Node} props.children - The children (filters like Activities)
  * @param {boolean} [props.isSecondaryFiltersOpen] - Whether the secondary filters are open
  * @param {Function} [props.toggleSecondaryFiltersOpen] - The function to toggle the secondary filters
  * @param {number} [props.selectedSecondaryFiltersCount] - The number of selected secondary filters
@@ -24,7 +24,7 @@ const SearchFiltersPrimaryComponent = props => {
   const {
     rootClassName,
     className,
-    children,
+    children, // Includes the Activities filter
     isSecondaryFiltersOpen = false,
     toggleSecondaryFiltersOpen = null,
     selectedSecondaryFiltersCount = 0,
@@ -49,6 +49,7 @@ const SearchFiltersPrimaryComponent = props => {
   return (
     <div className={classes}>
       <div className={css.filters}>
+        {/* Render children, including the Activities filter */}
         {children}
         {toggleSecondaryFiltersOpenButton}
       </div>
